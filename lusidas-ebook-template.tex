@@ -1,0 +1,359 @@
+% !TEX program = xelatex
+% -----------------------------------------------------------------------------
+% Template luxuoso para uma edição épica d"Os Lusíadas" no Overleaf
+% Substitua os comandos \placeholder{...} pelos textos reais do poema.
+% -----------------------------------------------------------------------------
+\documentclass[12pt,oneside]{memoir}
+
+% -----------------------------------------------------------------------------
+% Configuração tipográfica e de fontes
+% -----------------------------------------------------------------------------
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{microtype}
+  \usepackage[sc]{mathpazo}
+\else
+  \usepackage{fontspec}
+  \setmainfont{EB Garamond}
+  \setsansfont{Source Sans Pro}
+  \usepackage{microtype}
+\fi
+
+% -----------------------------------------------------------------------------
+% Pacotes visuais e utilitários
+% -----------------------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc,decorations.pathmorphing,shapes.geometric}
+\usepackage{pgfornament}
+\usepackage{xcolor}
+\usepackage{background}
+\usepackage{everypage}
+\usepackage{lettrine}
+\usepackage{verse}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=lusidasblue,
+  pdfauthor={Luís de Camões},
+  pdftitle={Os Lusíadas --- Edição de Luxo},
+  pdfsubject={Template para ebook épico},
+  pdfcreator={Overleaf}
+}
+
+% -----------------------------------------------------------------------------
+% Paleta de cores inspirada em ouro e azul profundo
+% -----------------------------------------------------------------------------
+\definecolor{lusidasblue}{HTML}{1C3D5A}
+\definecolor{lusidasgold}{HTML}{C6A45C}
+\definecolor{lusidascream}{HTML}{F4E9D8}
+\definecolor{lusidasink}{HTML}{2F2A28}
+
+% -----------------------------------------------------------------------------
+% Layout da página em formato 6" x 9"
+% -----------------------------------------------------------------------------
+\setstocksize{9in}{6in}
+\settrimmedsize{9in}{6in}{*}
+\setlrmarginsandblock{1.15in}{0.9in}{*}
+\setulmarginsandblock{1.25in}{1.25in}{*}
+\checkandfixthelayout
+
+% -----------------------------------------------------------------------------
+% Fundo marmorizado delicado em cada página
+% -----------------------------------------------------------------------------
+\backgroundsetup{
+  scale=1,
+  color=lusidasgold!10,
+  opacity=0.25,
+  angle=0,
+  contents={\begin{tikzpicture}[remember picture,overlay]
+      \draw[color=lusidasgold!25,very thin] (0,0) rectangle (\paperwidth,\paperheight);
+      \foreach \x in {0.2,0.45,0.7,0.95}{
+        \draw[color=lusidasgold!15,decorate,decoration={random steps,segment length=20pt,amplitude=3pt}]
+          (\x*\paperwidth,0) -- +(0,\paperheight);
+      }
+    \end{tikzpicture}}
+}
+\AddEverypageHook{\BgMaterial}
+
+
+
+% -----------------------------------------------------------------------------
+% Ornamentação recorrente
+% -----------------------------------------------------------------------------
+\newcommand{\goldrule}{%
+  \begin{center}
+    \tikz{\draw[color=lusidasgold, line width=0.8pt] (0,0) -- (3.5,0);
+      \node at (-0.3,0) {\pgfornament[width=0.6cm,color=lusidasgold]{63}};
+      \node at (3.8,0) {\pgfornament[width=0.6cm,color=lusidasgold]{66}};}
+  \end{center}
+}
+
+% -----------------------------------------------------------------------------
+% Estilo de página e cabeçalhos
+% -----------------------------------------------------------------------------
+\makepagestyle{lusidas}
+\makeoddhead{lusidas}{\color{lusidasgold}\scshape Os Lusíadas}{\color{lusidasblue}\thepage}{\color{lusidasgold}\scshape\leftmark}
+\makeevenhead{lusidas}{\color{lusidasgold}\scshape Os Lusíadas}{\color{lusidasblue}\thepage}{\color{lusidasgold}\scshape\rightmark}
+\makeoddfoot{lusidas}{}{}{}
+\makeevenfoot{lusidas}{}{}{}
+\pagestyle{lusidas}
+\aliaspagestyle{chapter}{plain}
+
+% -----------------------------------------------------------------------------
+% Configuração da tabela de conteúdos
+% -----------------------------------------------------------------------------
+\renewcommand{\printtoctitle}[1]{%
+  \begin{center}
+    \vspace*{2em}
+    {\Huge\color{lusidasblue}\scshape #1}\par
+    \vspace{0.75em}
+    \pgfornament[width=3cm,color=lusidasgold]{88}
+  \end{center}
+  \vspace{2em}
+}
+\setlength{\cftbeforechapskip}{1em}
+\renewcommand{\cftchapterfont}{\color{lusidasink}\scshape}
+\renewcommand{\cftchapterpagefont}{\color{lusidasblue}}
+
+% -----------------------------------------------------------------------------
+% Ambiente para versos com largura controlada
+% -----------------------------------------------------------------------------
+\newlength{\versewidth}
+\setlength{\versewidth}{0.85\textwidth}
+\newenvironment{lusidaverse}{\begin{verse}[\versewidth]}{\end{verse}}
+
+% -----------------------------------------------------------------------------
+% Separador elegante entre estrofes
+% -----------------------------------------------------------------------------
+\newcommand{\estrofeSeparator}{%
+  \vspace{1.2em}
+  \begin{center}
+    \pgfornament[width=1.8cm,color=lusidasgold]{87}
+  \end{center}
+  \vspace{1.2em}
+}
+
+% -----------------------------------------------------------------------------
+% Marcadores de posição para texto a ser substituído
+% -----------------------------------------------------------------------------
+\newcommand{\placeholder}[1]{%
+  {\color{lusidasblue!70!black}\itshape[Substituir por #1]}
+}
+
+% -----------------------------------------------------------------------------
+% Estrutura do Canto
+% -----------------------------------------------------------------------------
+\newcommand{\Canto}[3]{%
+  \cleartorecto
+  \thispagestyle{plain}
+  \phantomsection
+  \markboth{Canto~#1}{Canto~#1}
+  \addcontentsline{toc}{chapter}{Canto~#1 --- #2}
+  \begin{center}
+    \vspace*{4em}
+    {\Large\color{lusidasblue}\scshape Canto}
+    \par\vspace{0.5em}
+    {\fontsize{42}{44}\selectfont\color{lusidasgold}\textls[160]{#1}}
+    \par\vspace{0.75em}
+    {\Large\color{lusidasblue}\itshape #2}
+    \par\vspace{0.75em}
+    \pgfornament[width=2.5cm,color=lusidasgold]{88}
+  \end{center}
+  \vspace{2em}
+  #3
+}
+
+% -----------------------------------------------------------------------------
+% Pequena vinheta para seções especiais
+% -----------------------------------------------------------------------------
+\newcommand{\sectionornament}[1]{%
+  \begin{center}
+    {\large\color{lusidasblue}\scshape #1}\par
+    \pgfornament[width=1.6cm,color=lusidasgold]{77}
+  \end{center}
+  \vspace{1.2em}
+}
+
+\begin{document}
+\frontmatter
+
+% -----------------------------------------------------------------------------
+% Página de rosto com moldura ornamentada
+% -----------------------------------------------------------------------------
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture,overlay]
+    \draw[line width=1pt,color=lusidasgold] ($(current page.north west)+(0.6cm,-0.6cm)$)
+      rectangle ($(current page.south east)+(-0.6cm,0.6cm)$);
+    \draw[line width=0.5pt,color=lusidasgold!70] ($(current page.north west)+(0.9cm,-0.9cm)$)
+      rectangle ($(current page.south east)+(-0.9cm,0.9cm)$);
+  \end{tikzpicture}
+  \vspace*{3cm}
+  \begin{center}
+    {\Huge\color{lusidasgold}\textsc{Os Lusíadas}}\par
+    \vspace{1em}
+    {\Large\color{lusidasblue}\itshape Edição Épica em Formato Ebook}\par
+    \vspace{2.5em}
+    \pgfornament[width=4cm,color=lusidasgold]{85}\par
+    \vspace{2.5em}
+    {\Large\color{lusidasink}\scshape Luís de Camões}\par
+    \vspace{6em}
+    {\normalsize\color{lusidasblue}\placeholder{Inserir selo editorial ou logotipo}}\par
+  \end{center}
+  \vfill
+  \begin{center}
+    {\small\color{lusidasink}\textsc{Ano da edição}}\par
+    \vspace{0.5em}
+    {\color{lusidasblue}\placeholder{Inserir local e data}}
+  \end{center}
+\end{titlepage}
+
+% -----------------------------------------------------------------------------
+% Página de créditos
+% -----------------------------------------------------------------------------
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{6cm}
+\begin{center}
+  {\small\color{lusidasink}\placeholder{Informações editoriais, ISBN, créditos de design}}
+\end{center}
+
+% -----------------------------------------------------------------------------
+% Dedicatória
+% -----------------------------------------------------------------------------
+\cleardoublepage
+\thispagestyle{empty}
+\vspace*{5cm}
+\sectionornament{Dedicatória}
+\begin{center}
+  {\itshape\color{lusidasink}\placeholder{Texto da dedicatória}}
+\end{center}
+
+% -----------------------------------------------------------------------------
+% Prefácio
+% -----------------------------------------------------------------------------
+\cleardoublepage
+\thispagestyle{plain}
+\sectionornament{Prefácio}
+\placeholder{Escrever o prefácio desta edição especial.}
+
+\goldrule
+
+\placeholder{Detalhar o contexto histórico, notas editoriais e agradecimentos.}
+
+\tableofcontents*
+
+\mainmatter
+
+% -----------------------------------------------------------------------------
+% Exemplo de Canto I com espaços para estrofes
+% -----------------------------------------------------------------------------
+\Canto{I}{Proposição}{%
+  \begin{lusidaverse}
+    \lettrine[lines=3,lhang=0.15,loversize=0.12]{\color{lusidasgold}\textsc{Q}}{\placeholder{Primeiro verso da epopeia.}}\\*
+    \placeholder{Segundo verso da estrofe inaugural.}\\
+    \placeholder{Terceiro verso da estrofe inaugural.}\\
+    \placeholder{Quarto verso da estrofe inaugural.}
+  \end{lusidaverse}
+
+  \estrofeSeparator
+
+  \begin{lusidaverse}
+    \placeholder{Primeiro verso da segunda estrofe.}\\
+    \placeholder{Segundo verso da segunda estrofe.}\\
+    \placeholder{Terceiro verso da segunda estrofe.}\\
+    \placeholder{Quarto verso da segunda estrofe.}
+  \end{lusidaverse}
+
+  \estrofeSeparator
+
+  \begin{lusidaverse}
+    \placeholder{Adicionar quantas estrofes forem necessárias para o Canto I.}
+  \end{lusidaverse}
+}
+
+% -----------------------------------------------------------------------------
+% Exemplo de Canto II com divisão temática
+% -----------------------------------------------------------------------------
+\Canto{II}{Dedicação ao Herói}{%
+  \sectionornament{Invocação}
+  \begin{lusidaverse}
+    \placeholder{Versos da invocação do Canto II.}\\
+    \placeholder{Continuar com os versos correspondentes.}
+  \end{lusidaverse}
+
+  \estrofeSeparator
+
+  \sectionornament{Narração}
+  \begin{lusidaverse}
+    \placeholder{Versos narrativos iniciais do Canto II.}\\
+    \placeholder{Seguir com os versos seguintes até completar o canto.}
+  \end{lusidaverse}
+}
+
+% -----------------------------------------------------------------------------
+% Espaço para demais Cantos
+% -----------------------------------------------------------------------------
+\Canto{III}{\placeholder{Subtítulo do Canto III}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto III.}
+  \end{lusidaverse}
+}
+
+\Canto{IV}{\placeholder{Subtítulo do Canto IV}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto IV.}
+  \end{lusidaverse}
+}
+
+\Canto{V}{\placeholder{Subtítulo do Canto V}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto V.}
+  \end{lusidaverse}
+}
+
+\Canto{VI}{\placeholder{Subtítulo do Canto VI}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto VI.}
+  \end{lusidaverse}
+}
+
+\Canto{VII}{\placeholder{Subtítulo do Canto VII}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto VII.}
+  \end{lusidaverse}
+}
+
+\Canto{VIII}{\placeholder{Subtítulo do Canto VIII}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto VIII.}
+  \end{lusidaverse}
+}
+
+\Canto{IX}{\placeholder{Subtítulo do Canto IX}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto IX.}
+  \end{lusidaverse}
+}
+
+\Canto{X}{\placeholder{Subtítulo do Canto X}}{
+  \begin{lusidaverse}
+    \placeholder{Inserir as estrofes completas do Canto X.}
+  \end{lusidaverse}
+}
+
+% -----------------------------------------------------------------------------
+% Apêndices e notas finais
+% -----------------------------------------------------------------------------
+\backmatter
+\cleardoublepage
+\sectionornament{Notas do Editor}
+\placeholder{Inserir notas críticas, comentários e glossário.}
+
+\goldrule
+
+\sectionornament{Bibliografia Consultada}
+\placeholder{Listar referências, edições consultadas e leituras recomendadas.}
+
+\end{document}
